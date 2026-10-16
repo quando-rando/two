@@ -18,14 +18,66 @@ def load_image(url):
         return None
 
 
+def set_image():
+    url = 'https://cataas.com/cat'
+    img = load_image(url)
+    if img:
+        label.configure(image=img)
+        label.image = img
+
+
+def open_new_window():
+    tag = tag_entry.get()
+    url_with_tag = (f'https://cataas.com/cat/{tag}' if tag
+                    else 'https://cataas.com/cat/')
+    img = load_image(url_with_tag)
+    if img:
+        new_window = Toplevel(root)
+        new_window.title('КОТЫ')
+        new_window.geometry('620x520')
+        label = Label(new_window, image=img)
+        label.image = img
+        label.pack()
+
+
+
+def exit():
+    root.destroy()
+
+
+
 root = Tk()
 root.title('Cats')
 root.geometry('800x600')
 label = Label(root, text='Cats')
 label.pack()
+update_btn = Button(text='Next', command=set_image)
+update_btn.pack(pady=5)
+
+menu_bar = Menu(root)
+root.config(menu=menu_bar)
+file_menu = Menu(menu_bar, tearoff=0)
+menu_bar.add_cascade(label='File', menu=file_menu)
+file_menu.add_command(label='Load', command=open_new_window)
+file_menu.add_separator()
+file_menu.add_command(label='Exit', command=exit)
+tag_entry = Entry(root)
+tag_entry.pack()
+
+load_button = Button(text='Загрузка по тегу', command=open_new_window)
+load_button.pack()
+
+
+# update_btn = Button(text='Next', command=set_image)
+# update_btn.pack(pady=5)
+
+
 url = 'https://cataas.com/cat'
-img = load_image(url)
-if img:
-    label.configure(image=img)
-    label.image = img
+# img = load_image(url)
+# if img:
+#     label.configure(image=img)
+#     label.image = img
+
+set_image()
+
 root.mainloop()
