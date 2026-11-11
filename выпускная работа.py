@@ -3,25 +3,28 @@ import tkinter as tk
 import requests
 
 def update_prices():
-    url = "https://api.coingecko.com/api/v3/simple/price"
+    try:
+        url = "https://api.coingecko.com/api/v3/simple/price"
 
-    params = {
+        params = {
         "ids": "bitcoin,ethereum,solana,dogecoin",
         "vs_currencies": "usd"
-    }
+        }
 
-    response = requests.get(url, params=params)
-    data = response.json()
+        response = requests.get(url, params=params)
+        data = response.json()
 
-    for coin_id in coins:
-        price = data[coin_id]["usd"]
-        price_labels[coin_id].config(text=f"${price:,.2f}")
+        for coin_id in coins:
+            price = data[coin_id]["usd"]
+            price_labels[coin_id].config(text=f"${price:,.2f}")
 
+    except:
+        from tkinter import messagebox
+        messagebox.showerror("Ошибка", "Не удалось получить курсы")
 
 window = tk.Tk()
 window.title("Курс криптовалют")
 window.geometry("400x350")
-# window.resizable(False, False)
 
 
 coins = {
@@ -58,8 +61,6 @@ for coin_id, coin_name in coins.items():
 update_button = tk.Button(window, text="Обновить курсы",
                 font=("Arial", 11), command=update_prices)
 
-
 update_button.pack(pady=20)
-
 
 window.mainloop()
